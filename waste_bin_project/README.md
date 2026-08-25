@@ -1,148 +1,119 @@
-# Shadow Network - Automatic Waste Management System
+# Shadow Network - Waste Management System
 
-## Overview
-This project is a QR code-based waste management system that uses liquid glass aesthetics for an attractive user interface. Users can login with a 6-digit password and earn points for recycling waste.
+## 🌟 Features
 
-## Features
-- **QR Code Generation**: Automatically generates a QR code that points to the web server
-- **Liquid Glass Aesthetics**: Beautiful animated background with glass-morphism design
-- **User Authentication**: 6-digit password-based login system
-- **Points System**: Earn 5 points for each recycling action with beautiful animations
-- **Team Branding**: Displays "Shadow Network" team name and "Vivek VM" as admin
+### Dark Theme Design
+- Modern dark aesthetic with liquid glass effects
+- Animated background blobs with smooth transitions
+- Professional cyan/blue color scheme
 
-## Project Structure
-```
-waste_bin_project/
-├── app.py              # Main Python application
-├── qr_code.png         # Generated QR code (created on first run)
-├── password.txt        # Contains the generated 6-digit password
-├── templates/
-│   ├── index.html      # Login page with liquid glass design
-│   └── dashboard.html  # User dashboard with points system
-└── static/             # Static files (if needed)
-```
+### Arc-Style Intro Animation
+- Browser-like circular expansion animation on page load
+- Smooth logo reveal with fade effects
+- Professional entrance experience
 
-## Installation
+### User Authentication
+- 6-digit random password generated on each server start
+- Password displayed prominently on login screen
+- User registration and login system
+- Session management
 
-### Requirements
-- Python 3.x
-- Flask
-- qrcode
-- Pillow
+### Waste Disposal System
+- Beautiful modal interface for waste disposal
+- Counter to select number of items (1-10 limit)
+- Real-time points preview (5 points per item)
+- Smooth confirmation flow
 
-### Install Dependencies
+### Points & Rewards
+- Earn 5 points for each waste item disposed
+- Large, animated points display
+- "Claim Rewards" button to redeem points
+- Smooth claiming animation with confetti effects
+
+### Animations
+- Success overlay with checkmark icon
+- Colorful confetti celebration
+- Toast notifications
+- Smooth transitions throughout
+
+## 🚀 How to Run
+
+1. Navigate to the project directory:
 ```bash
-pip install flask qrcode pillow
+cd waste_bin_project
 ```
 
-## Usage
-
-### Running the Application
+2. Install dependencies (if not already installed):
 ```bash
-cd /workspace/waste_bin_project
+pip install flask qrcode[pil]
+```
+
+3. Run the application:
+```bash
 python app.py
 ```
 
-### What Happens When You Run:
-1. A random 6-digit password is generated
-2. The password is saved to `password.txt`
-3. A QR code (`qr_code.png`) is generated pointing to the web server
-4. The web server starts on port 5000
-5. Your default browser opens automatically to the website
+4. The application will:
+   - Generate a random 6-digit password
+   - Create a QR code (`qr_code.png`)
+   - Save the password to `password.txt`
+   - Start the web server on port 5000
+   - Automatically open your default browser
 
-### Accessing the Website
-- **Scan the QR code**: Use any QR code scanner to access the website
-- **Direct access**: Open `http://localhost:5000` in your browser
-- **Network access**: The server is accessible from other devices on the same network
+## 📱 Accessing the Website
 
-### Login Process
-1. Enter any username
-2. Enter the 6-digit password (found in `password.txt` or displayed in console)
-3. Click "Login"
+- **Local Access**: http://127.0.0.1:5000
+- **Network Access**: http://[YOUR_IP]:5000
+- **QR Code**: Scan `qr_code.png` with any QR scanner
 
-### Earning Points
-1. After logging in, you'll see your dashboard
-2. Click "Recycle & Earn 5 Points" button
-3. Watch the beautiful animation with confetti and stars
-4. Your points total will update
+## 🔐 Login Credentials
 
-## Password Information
-- The password is randomly generated each time you run the application
-- It's a 6-digit number (e.g., 818263)
-- Found in:
-  - Console output when starting the server
-  - `password.txt` file
-  - Same for all users (system-wide password)
+- **Username**: Choose any username (new users are auto-created)
+- **Password**: Displayed on the login screen (changes each restart)
 
-## Team Information
-- **Team Name**: Shadow Network
+## 👥 Team
+
 - **Admin/Leader**: Vivek VM
-- **Project**: Automatic Waste Management System using Google Teachable Machine
+- **Team**: Shadow Network
 
-## Technical Details
+## 🎨 Design Highlights
 
-### Backend (Flask)
-- User session management
-- Password validation
-- Points tracking
-- RESTful API endpoints
+- Dark theme (#0a0a0f background)
+- Cyan/blue gradient accents (#00d9ff, #0066ff)
+- Glassmorphism effects
+- Smooth animations and transitions
+- Responsive design for all devices
 
-### Frontend
-- Liquid glass background with animated blobs
-- Glass-morphism card design
-- Responsive layout
-- Smooth animations for points earning
-- Confetti and star effects
+## 📁 Project Structure
 
-### QR Code
-- Generated using the `qrcode` library
-- Points to the local web server URL
-- Automatically opened in browser
-
-## API Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/` | GET | Login page |
-| `/login` | POST | User authentication |
-| `/dashboard` | GET | User dashboard |
-| `/add_points` | POST | Add 5 points to user account |
-| `/logout` | GET | Logout user |
-
-## Customization
-
-### Changing the Port
-Edit `app.py` and change the `port` variable:
-```python
-port = 5000  # Change to desired port
+```
+waste_bin_project/
+├── app.py                 # Main Flask application
+├── templates/
+│   ├── index.html        # Login page with intro animation
+│   └── dashboard.html    # User dashboard with points system
+├── static/               # Static files (if needed)
+├── qr_code.png          # Generated QR code
+├── password.txt         # Password reference file
+└── README.md            # This file
 ```
 
-### Modifying Points Value
-Edit the `add_points()` function in `app.py`:
-```python
-points_to_add = 5  # Change to desired points value
-```
+## 🎯 Usage Flow
 
-## Troubleshooting
+1. **Login**: Enter username and the displayed 6-digit password
+2. **Dispose Waste**: Click "Dispose Waste" button
+3. **Select Count**: Use +/- buttons to choose number of items (max 10)
+4. **Confirm**: Click "Confirm" to earn points (5 points × count)
+5. **View Points**: Watch your points accumulate with animations
+6. **Claim Rewards**: Click "Claim Rewards" when ready to redeem
 
-### Port Already in Use
-If port 5000 is already in use, either:
-1. Stop the existing process: `pkill -f "python app.py"`
-2. Change the port in `app.py`
+## 💡 Tips
 
-### QR Code Not Scanning
-- Ensure the QR code image is clear
-- Make sure your device is on the same network
-- Try accessing the URL directly
-
-### Browser Doesn't Open
-- Manually open the URL shown in the console
-- Check if your default browser is properly configured
-
-## License
-This project is created for Shadow Network's waste management initiative.
+- Maximum 10 items can be disposed at once
+- Points reset after claiming rewards
+- Password changes every time the server restarts
+- QR code points to your local network IP for mobile access
 
 ---
-**Created by**: Vivek VM  
-**Team**: Shadow Network  
-**Purpose**: Automatic Waste Classification and Management
+
+**Shadow Network** - Making waste management rewarding! ♻️
