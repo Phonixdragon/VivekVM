@@ -164,7 +164,7 @@ if __name__ == '__main__':
     finally:
         s.close()
     
-    port = 5000
+    port = 8000
     url = f"http://{host_ip}:{port}"
     
     # Generate QR code
