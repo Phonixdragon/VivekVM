@@ -1,0 +1,37 @@
+```
+# Logs and temp files
+*.log
+*.tmp
+
+# Environment and sensitive files
+.env
+.env.local
+*.env.*
+
+# Dependencies and build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+.env/
+
+# Editors and IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Original rules preserved
+*.log
+```
