@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow Network - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #ffffff;
+        }
+
+        /* Arc-style Intro Animation */
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: introFadeOut 1.5s ease-in-out 2.5s forwards;
+            pointer-events: none;
+        }
+
+        .intro-circle {
+            width: 0;
+            height: 0;
+            background: linear-gradient(135deg, #00d9ff, #0066ff);
+            border-radius: 50%;
+            animation: introExpand 2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+        }
+
+        .intro-logo {
+            position: absolute;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: introLogoAppear 0.8s ease-out 1s forwards, introLogoFade 0.5s ease-in 2.2s forwards;
+            text-shadow: 0 0 30px rgba(0, 217, 255, 0.8);
+        }
+
+        @keyframes introExpand {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                width: 300vmax;
+                height: 300vmax;
+                opacity: 0;
+            }
+        }
+
+        @keyframes introLogoAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes introLogoFade {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes introFadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Animated background blobs */
+        .background-blobs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .blob:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            background: #00d9ff;
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .blob:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            background: #0066ff;
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        .blob:nth-child(3) {
+            width: 300px;
+            height: 300px;
+            background: #7b2cbf;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(50px, -50px) scale(1.1);
+            }
+            50% {
+                transform: translate(-30px, 30px) scale(0.9);
+            }
+            75% {
+                transform: translate(40px, 20px) scale(1.05);
+            }
+        }
+
+        /* Login Container */
+        .login-container {
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            animation: slideUp 0.8s ease-out 2.5s both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d9ff, #0066ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .logo-section p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 0.85rem;
+            color: #00d9ff;
+            margin-top: 15px;
+        }
+
+        /* QR Code Display */
+        .qr-display {
+            background: rgba(0, 217, 255, 0.08);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 30px;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        .qr-display h3 {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .qr-frame {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            display: inline-block;
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .qr-frame:hover {
+            border-color: #00d9ff;
+            box-shadow: 0 0 40px rgba(0, 217, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        .qr-image {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            border-radius: 8px;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+        }
+
+        .qr-hint {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 15px;
+        }
+
+        /* Password Display Box */
+        .password-display {
+            background: rgba(0, 217, 255, 0.08);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 30px;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 217, 255, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(0, 217, 255, 0.2);
+            }
+        }
+
+        .password-display h3 {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .password-code {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00d9ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 8px;
+            text-shadow: 0 0 30px rgba(0, 217, 255, 0.5);
+            font-family: 'Courier New', monospace;
+        }
+
+        .password-hint {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 10px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #00d9ff;
+            background: rgba(0, 217, 255, 0.05);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #00d9ff, #0066ff);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Message Box */
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .message.success {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+            display: block;
+        }
+
+        .message.error {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            color: #ff4757;
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 40px 25px;
+                margin: 20px;
+            }
+
+            .logo-section h1 {
+                font-size: 2rem;
+            }
+
+            .password-code {
+                font-size: 2.2rem;
+                letter-spacing: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Arc-style Intro Animation -->
+    <div class="intro-overlay">
+        <div class="intro-circle"></div>
+        <div class="intro-logo">SHADOW NETWORK</div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="background-blobs">
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+    </div>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="logo-section">
+            <h1>Shadow Network</h1>
+            <p>Waste Management System</p>
+            <div class="admin-badge">👤 Admin: Vivek VM</div>
+        </div>
+
+        <!-- QR Code Display -->
+        <div class="qr-display">
+            <h3>Scan QR Code</h3>
+            <div class="qr-frame">
+                <img src="/static/qr_code.png" alt="QR Code" class="qr-image">
+            </div>
+            <p class="qr-hint">Scan to access the Shadow Network portal</p>
+        </div>
+
+        <!-- Password Display -->
+        <div class="password-display">
+            <h3>System Password</h3>
+            <div class="password-code">{{ password }}</div>
+            <p class="password-hint">Use this 6-digit code to login</p>
+        </div>
+
+        <!-- Message Box -->
+        <div id="message" class="message"></div>
+
+        <!-- Login Form -->
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="password">System Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter 6-digit password" maxlength="6" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Login</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const messageDiv = document.getElementById('message');
+            const submitBtn = document.querySelector('.submit-btn');
+            
+            // Disable button during request
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Logging in...';
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    messageDiv.className = 'message success';
+                    messageDiv.textContent = data.message;
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1000);
+                } else {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = data.message;
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Login';
+                }
+            } catch (error) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Connection error. Please try again.';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Login';
+            }
+        });
+
+        // Auto-focus username field after intro
+        setTimeout(() => {
+            document.getElementById('username').focus();
+        }, 3000);
+    </script>
+</body>
+</html>

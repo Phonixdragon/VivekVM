@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Shadow Network</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: #0a0a0f;
+            overflow-x: hidden;
+            position: relative;
+            color: #ffffff;
+        }
+
+        /* Liquid Glass Background Effect */
+        .liquid-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .liquid-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: #00d9ff;
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background: #0066ff;
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            width: 300px;
+            height: 300px;
+            background: #7b2cbf;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(50px, -50px) scale(1.1);
+            }
+            50% {
+                transform: translate(-30px, 30px) scale(0.9);
+            }
+            75% {
+                transform: translate(40px, 20px) scale(1.05);
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: relative;
+            z-index: 10;
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-brand {
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links a:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: #00d9ff;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .welcome-card {
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 
+                0 8px 32px 0 rgba(0, 0, 0, 0.5),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-card h1 {
+            color: #fff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00d9ff, #0066ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        /* Points Display */
+        .points-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .points-card {
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 
+                0 8px 32px 0 rgba(0, 0, 0, 0.5),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .points-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 40px 0 rgba(0, 217, 255, 0.2),
+                inset 0 0 0 1px rgba(0, 217, 255, 0.1);
+            border-color: rgba(0, 217, 255, 0.3);
+        }
+
+        .points-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+        }
+
+        .points-value {
+            color: #fff;
+            font-size: 4em;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .points-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.3em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Action Buttons */
+        .actions-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 20px 40px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(0, 102, 255, 0.1));
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            backdrop-filter: blur(10px);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.3), rgba(0, 102, 255, 0.2));
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.3);
+            border-color: #00d9ff;
+        }
+
+        .action-btn:active {
+            transform: translateY(-1px) scale(1);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .claim-btn {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 217, 255, 0.1));
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .claim-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.3), rgba(0, 217, 255, 0.2));
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.3);
+            border-color: #00ff88;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(20, 20, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.2);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            font-size: 2em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d9ff, #0066ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+        }
+
+        /* Counter Styles */
+        .counter-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .counter-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            background: rgba(0, 217, 255, 0.1);
+            color: #fff;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .counter-btn:hover {
+            background: rgba(0, 217, 255, 0.2);
+            border-color: #00d9ff;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+        }
+
+        .counter-btn:active {
+            transform: scale(0.95);
+        }
+
+        .counter-display {
+            font-size: 4em;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+            min-width: 100px;
+        }
+
+        .points-preview {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 20px;
+        }
+
+        .points-preview span {
+            color: #00ff88;
+            font-weight: 700;
+            font-size: 1.3em;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .modal-btn {
+            padding: 15px 35px;
+            border-radius: 15px;
+            border: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-btn-confirm {
+            background: linear-gradient(135deg, #00d9ff, #0066ff);
+            color: #fff;
+        }
+
+        .modal-btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.4);
+        }
+
+        /* Animation Overlay */
+        .animation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .animation-content {
+            text-align: center;
+            animation: smoothPopIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes smoothPopIn {
+            0% {
+                transform: scale(0.5) translateY(50px);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.1) translateY(-10px);
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .points-animation {
+            font-size: 6em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00ff88, #00d9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+            animation: pointsFloat 2s ease-out forwards;
+        }
+
+        @keyframes pointsFloat {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) translateY(-30px);
+                opacity: 0;
+            }
+        }
+
+        .total-points-display {
+            font-size: 2em;
+            color: #fff;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stars-container {
+            margin-top: 30px;
+            font-size: 3em;
+        }
+
+        .star {
+            display: inline-block;
+            color: #FFD700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            animation: starTwinkle 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes starTwinkle {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            animation: confettiFall 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .checkmark {
+            font-size: 5em;
+            color: #00ff88;
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+            animation: checkmarkPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        @keyframes checkmarkPop {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(20, 20, 30, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: #fff;
+            font-size: 1em;
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-color: rgba(0, 255, 136, 0.3);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .toast.error {
+            border-color: rgba(255, 71, 87, 0.3);
+            background: rgba(255, 71, 87, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .welcome-card {
+                padding: 30px 20px;
+            }
+
+            .welcome-card h1 {
+                font-size: 2em;
+            }
+
+            .points-value {
+                font-size: 3em;
+            }
+
+            .action-btn {
+                padding: 15px 25px;
+                font-size: 1em;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+
+            .counter-display {
+                font-size: 3em;
+            }
+
+            .points-animation {
+                font-size: 4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Liquid Background -->
+    <div class="liquid-bg">
+        <div class="liquid-blob blob-1"></div>
+        <div class="liquid-blob blob-2"></div>
+        <div class="liquid-blob blob-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-brand">♻️ SHADOW NETWORK</div>
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="welcome-card">
+            <h1>Welcome, {{ username }}!</h1>
+            <p>Admin: Vivek VM | Shadow Network Team</p>
+        </div>
+
+        <div class="points-section">
+            <div class="points-card">
+                <div class="points-icon">🏆</div>
+                <div class="points-value" id="currentPoints">{{ points }}</div>
+                <div class="points-label">Total Points</div>
+            </div>
+        </div>
+
+        <div class="actions-container">
+            <button class="action-btn" id="disposeBtn" onclick="openDisposeModal()">
+                ♻️ Dispose Waste
+            </button>
+            <button class="action-btn claim-btn" id="claimBtn" onclick="claimRewards()">
+                🎁 Claim Rewards
+            </button>
+        </div>
+    </div>
+
+    <!-- Dispose Waste Modal -->
+    <div class="modal-overlay" id="disposeModal">
+        <div class="modal-content">
+            <h2 class="modal-header">How Many Items?</h2>
+            <p style="color: rgba(255,255,255,0.6);">Select the number of waste items you're disposing</p>
+            
+            <div class="counter-container">
+                <button class="counter-btn" onclick="decrementCount()">−</button>
+                <div class="counter-display" id="wasteCount">1</div>
+                <button class="counter-btn" onclick="incrementCount()">+</button>
+            </div>
+            
+            <div class="points-preview">
+                You'll earn <span id="pointsPreview">5</span> points
+            </div>
+
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" onclick="closeDisposeModal()">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" onclick="confirmDisposal()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Animation Overlay -->
+    <div class="animation-overlay" id="animationOverlay">
+        <div class="animation-content">
+            <div class="checkmark">✓</div>
+            <div class="points-animation" id="pointsAnimationText">+5 POINTS!</div>
+            <div class="total-points-display" id="totalPointsDisplay">Total: 10 Points</div>
+            <div class="stars-container" id="starsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let wasteCount = 1;
+        const maxCount = 10;
+        const minCount = 1;
+        const pointsPerItem = 5;
+        let isAnimating = false;
+
+        function openDisposeModal() {
+            wasteCount = 1;
+            updateCounterDisplay();
+            const modal = document.getElementById('disposeModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        function closeDisposeModal() {
+            const modal = document.getElementById('disposeModal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function incrementCount() {
+            if (wasteCount < maxCount) {
+                wasteCount++;
+                updateCounterDisplay();
+            }
+        }
+
+        function decrementCount() {
+            if (wasteCount > minCount) {
+                wasteCount--;
+                updateCounterDisplay();
+            }
+        }
+
+        function updateCounterDisplay() {
+            document.getElementById('wasteCount').textContent = wasteCount;
+            document.getElementById('pointsPreview').textContent = wasteCount * pointsPerItem;
+        }
+
+        function confirmDisposal() {
+            if (isAnimating) return;
+            
+            closeDisposeModal();
+            isAnimating = true;
+            
+            const totalPoints = wasteCount * pointsPerItem;
+            
+            fetch('/add_points', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ count: wasteCount })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccessAnimation(totalPoints, data.new_points);
+                } else {
+                    showToast(data.message, 'error');
+                    isAnimating = false;
+                }
+            })
+            .catch(error => {
+                showToast('An error occurred. Please try again.', 'error');
+                isAnimating = false;
+            });
+        }
+
+        function claimRewards() {
+            const currentPoints = parseInt(document.getElementById('currentPoints').textContent);
+            
+            if (currentPoints <= 0) {
+                showToast('No points to claim!', 'error');
+                return;
+            }
+            
+            if (isAnimating) return;
+            
+            isAnimating = true;
+            
+            fetch('/claim_rewards', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showClaimAnimation(currentPoints);
+                } else {
+                    showToast(data.message, 'error');
+                    isAnimating = false;
+                }
+            })
+            .catch(error => {
+                showToast('An error occurred. Please try again.', 'error');
+                isAnimating = false;
+            });
+        }
+
+        function showSuccessAnimation(earnedPoints, newTotal) {
+            const overlay = document.getElementById('animationOverlay');
+            const starsContainer = document.getElementById('starsContainer');
+            const pointsText = document.getElementById('pointsAnimationText');
+            const totalText = document.getElementById('totalPointsDisplay');
+            
+            pointsText.textContent = `+${earnedPoints} POINTS!`;
+            totalText.textContent = `Total: ${newTotal} Points`;
+            
+            overlay.style.display = 'flex';
+            
+            // Create stars with staggered animation
+            starsContainer.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const star = document.createElement('span');
+                star.className = 'star';
+                star.textContent = '⭐';
+                star.style.animationDelay = `${i * 0.1}s`;
+                starsContainer.appendChild(star);
+            }
+
+            // Create confetti
+            createConfetti();
+
+            // Update points display
+            setTimeout(() => {
+                document.getElementById('currentPoints').textContent = newTotal;
+            }, 300);
+
+            // Hide overlay after 2.5 seconds
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                isAnimating = false;
+                showToast(`Successfully earned ${earnedPoints} points!`, 'success');
+            }, 2500);
+        }
+
+        function showClaimAnimation(claimedPoints) {
+            const overlay = document.getElementById('animationOverlay');
+            const starsContainer = document.getElementById('starsContainer');
+            const pointsText = document.getElementById('pointsAnimationText');
+            const totalText = document.getElementById('totalPointsDisplay');
+            
+            pointsText.textContent = `🎉 ${claimedPoints} PTS CLAIMED!`;
+            totalText.textContent = 'Rewards Claimed Successfully!';
+            
+            overlay.style.display = 'flex';
+            
+            // Create more stars for claim
+            starsContainer.innerHTML = '';
+            for (let i = 0; i < 7; i++) {
+                const star = document.createElement('span');
+                star.className = 'star';
+                star.textContent = '⭐';
+                star.style.animationDelay = `${i * 0.08}s`;
+                starsContainer.appendChild(star);
+            }
+
+            // Create extra confetti for claim
+            createConfetti(150);
+
+            // Reset points to 0
+            setTimeout(() => {
+                document.getElementById('currentPoints').textContent = '0';
+            }, 300);
+
+            // Hide overlay after 3 seconds
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                isAnimating = false;
+                showToast(`Successfully claimed ${claimedPoints} points!`, 'success');
+            }, 3000);
+        }
+
+        function createConfetti(count = 100) {
+            const colors = ['#00d9ff', '#00ff88', '#0066ff', '#ffd700', '#ff00ff', '#00ffff', '#ffa500', '#ffc0cb'];
+            const overlay = document.querySelector('.animation-overlay');
+            
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-20px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    overlay.appendChild(confetti);
+                    
+                    // Remove confetti after animation
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }, i * 20);
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
