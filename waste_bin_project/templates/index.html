@@ -222,6 +222,55 @@
             margin-top: 15px;
         }
 
+        /* QR Code Display */
+        .qr-display {
+            background: rgba(0, 217, 255, 0.08);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 30px;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        .qr-display h3 {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .qr-frame {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            display: inline-block;
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .qr-frame:hover {
+            border-color: #00d9ff;
+            box-shadow: 0 0 40px rgba(0, 217, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        .qr-image {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            border-radius: 8px;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+        }
+
+        .qr-hint {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 15px;
+        }
+
         /* Password Display Box */
         .password-display {
             background: rgba(0, 217, 255, 0.08);
@@ -390,6 +439,15 @@
             <h1>Shadow Network</h1>
             <p>Waste Management System</p>
             <div class="admin-badge">👤 Admin: Vivek VM</div>
+        </div>
+
+        <!-- QR Code Display -->
+        <div class="qr-display">
+            <h3>Scan QR Code</h3>
+            <div class="qr-frame">
+                <img src="/static/qr_code.png" alt="QR Code" class="qr-image">
+            </div>
+            <p class="qr-hint">Scan to access the Shadow Network portal</p>
         </div>
 
         <!-- Password Display -->
